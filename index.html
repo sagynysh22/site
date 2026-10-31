@@ -1,0 +1,901 @@
+!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sportdo — Премиальный магазин спортивных товаров в Казахстане</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Конфиг Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            neon: '#FF6201',
+                            neonDark: '#F63E02',
+                            red: '#F63E02',
+                            orange: '#FAA300',
+                            yellow: '#F3B700',
+                            amber: '#E57C04',
+                            dark: '#0D0F12',
+                            card: '#16191E',
+                            border: '#2B2118',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #0D0F12;
+            color: #E5E7EB;
+            font-family: 'Inter', sans-serif;
+        }
+        .font-display {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D0F12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A2E35;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF6201;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-brand-neon selection:text-black">
+
+    <!-- 1. ВЕРХНИЙ БАННЕР УВЕДОМЛЕНИЙ -->
+    <div class="bg-gradient-to-r from-brand-neon via-brand-yellow to-brand-orange text-black font-semibold text-xs md:text-sm py-2 px-4 text-center tracking-wide">
+        ⚡ БЕСПЛАТНАЯ ДОСТАВКА ПО КАЗАХСТАНУ ПРИ ЗАКАЗЕ ОТ 15 000 ₸ • ПРОМОКОД НА СКИДКУ 50%: <span class="underline font-bold">START2026</span>
+    </div>
+
+    <!-- 2. ШАПКА САЙТА (HEADER) -->
+    <header class="sticky top-0 z-40 bg-brand-dark/90 backdrop-blur-md border-b border-brand-border transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+
+            <!-- Логотип -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-brand-neon rounded-xl flex items-center justify-center transform -skew-x-12 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid font-black fa-bolt text-black text-xl"></i>
+                </div>
+                <span class="font-display font-black text-2xl sm:text-3xl italic uppercase text-white">
+                    SPORT<span class="text-brand-neon">DO</span>
+                </span>
+            </a>
+
+            <!-- Десктоп навигация -->
+            <nav class="hidden lg:flex items-center gap-8 font-medium text-sm text-gray-300">
+                <a href="#hero" class="hover:text-brand-neon transition-colors">Главная</a>
+                <a href="#catalog" class="hover:text-brand-neon transition-colors">Каталог</a>
+                <a href="#promo" class="hover:text-brand-neon transition-colors text-brand-orange font-semibold">Акции 🔥</a>
+                <a href="#features" class="hover:text-brand-neon transition-colors">О нас</a>
+                <a href="#footer" class="hover:text-brand-neon transition-colors">Контакты</a>
+            </nav>
+
+            <!-- Поиск и Корзина -->
+            <div class="flex items-center gap-3 sm:gap-4">
+                <!-- Поисковая строка -->
+                <div class="relative hidden sm:block w-48 md:w-64">
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Поиск товаров..."
+                        class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-2 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-neon transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-500 text-sm"></i>
+                </div>
+
+                <!-- Кнопка корзины -->
+                <button onclick="toggleCart()" class="relative bg-brand-card hover:bg-brand-border border border-brand-border p-3 rounded-xl transition-all flex items-center justify-center group">
+                    <i class="fa-solid fa-bag-shopping text-gray-200 group-hover:text-brand-neon text-lg"></i>
+                    <span id="cartBadge" class="absolute -top-2 -right-2 bg-brand-neon text-black font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-lg">0</span>
+                </button>
+
+                <!-- Мобильное меню бургер -->
+                <button onclick="toggleMobileMenu()" class="lg:hidden bg-brand-card p-3 rounded-xl border border-brand-border text-gray-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Мобильная поисковая строка -->
+        <div class="sm:hidden px-4 pb-3">
+            <div class="relative w-full">
+                <input type="text" id="mobileSearchInput" oninput="handleMobileSearch()" placeholder="Поиск товаров..."
+                    class="w-full bg-brand-card border border-brand-border rounded-xl px-4 py-2 pl-10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-neon">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-500 text-sm"></i>
+            </div>
+        </div>
+
+        <!-- Мобильное меню -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-brand-card border-b border-brand-border px-6 py-4 space-y-3">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-neon py-1">Главная</a>
+            <a href="#catalog" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-neon py-1">Каталог</a>
+            <a href="#promo" onclick="toggleMobileMenu()" class="block text-brand-orange font-semibold py-1">Акции 🔥</a>
+            <a href="#features" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-neon py-1">О нас</a>
+            <a href="#footer" onclick="toggleMobileMenu()" class="block text-gray-300 hover:text-brand-neon py-1">Контакты</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- 3. ГЛАВНЫЙ БАННЕР (HERO SECTION) -->
+        <section id="hero" class="relative py-12 lg:py-24 overflow-hidden border-b border-brand-border">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-neon/10 blur-[120px] rounded-full pointer-events-none"></div>
+            <div class="absolute bottom-0 right-10 w-[300px] h-[300px] bg-brand-orange/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                    <!-- Текст баннера -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-card border border-brand-border text-xs sm:text-sm font-semibold text-brand-neon">
+                            <span class="w-2 h-2 rounded-full bg-brand-neon animate-pulse"></span>
+                            Новая коллекция 2026 года
+                        </div>
+                        <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-none text-white">
+                            Преодолевай <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow via-brand-orange to-brand-neon">Свои страхи</span>
+                        </h1>
+                        <p class="text-gray-400 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 font-light">
+                            Профессиональная экипировка, высокотехнологичная обувь и спортивный инвентарь с быстрой доставкой по всему Казахстану.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                            <a href="#catalog" class="w-full sm:w-auto px-8 py-4 bg-brand-neon text-black font-extrabold rounded-xl hover:bg-brand-neonDark transform hover:-translate-y-0.5 transition-all text-center flex items-center justify-center gap-2 shadow-lg shadow-brand-neon/20">
+                                В КАТАЛОГ <i class="fa-solid fa-arrow-right text-sm"></i>
+                            </a>
+                            <a href="#promo" class="w-full sm:w-auto px-8 py-4 bg-brand-card text-white font-semibold rounded-xl border border-brand-border hover:border-gray-500 transition-all text-center">
+                                Узнать об акциях
+                            </a>
+                        </div>
+
+                        <!-- Статистика -->
+                        <div class="pt-8 grid grid-cols-3 gap-4 border-t border-brand-border/60 max-w-md mx-auto lg:mx-0">
+                            <div>
+                                <div class="font-display text-2xl sm:text-3xl font-bold text-white">10k+</div>
+                                <div class="text-xs text-gray-500">Товаров в наличии</div>
+                            </div>
+                            <div>
+                                <div class="font-display text-2xl sm:text-3xl font-bold text-white">99%</div>
+                                <div class="text-xs text-gray-500">Довольных клиентов</div>
+                            </div>
+                            <div>
+                                <div class="font-display text-2xl sm:text-3xl font-bold text-white">24/7</div>
+                                <div class="text-xs text-gray-500">Поддержка</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Картинка баннера -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative mx-auto max-w-md lg:max-w-none">
+                            <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-brand-neon to-brand-orange opacity-30 blur-xl"></div>
+                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="Спортивные кроссовки"
+                                class="relative rounded-3xl object-cover shadow-2xl border border-brand-border w-full h-[380px] sm:h-[480px]">
+
+                            <!-- Плавающая плашка -->
+                            <div class="absolute bottom-6 left-6 right-6 bg-brand-dark/90 backdrop-blur-md p-4 rounded-2xl border border-brand-border flex items-center gap-4">
+                                <div class="w-12 h-12 bg-brand-orange/20 rounded-xl flex items-center justify-center text-brand-orange">
+                                    <i class="fa-solid fa-fire text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400">Бестселлер недели</div>
+                                    <div class="font-bold text-sm text-white">Nike Air Zoom Alphafly</div>
+                                    <div class="text-brand-neon font-bold text-xs">Скидка -20%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. КАТАЛОГ С ФИЛЬТРАЦИЕЙ И СОРТИРОВКОЙ -->
+        <section id="catalog" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <h2 class="font-display text-3xl sm:text-4xl font-black uppercase text-white">
+                        Каталог <span class="text-brand-neon">товаров</span>
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-1">Выберите экипировку для ваших тренировок</p>
+                </div>
+
+                <!-- Сортировка -->
+                <div class="flex items-center gap-3 self-start md:self-auto">
+                    <label for="sortSelect" class="text-xs text-gray-400 whitespace-nowrap">Сортировать по:</label>
+                    <select id="sortSelect" onchange="renderProducts()"
+                        class="bg-brand-card border border-brand-border text-white text-sm rounded-xl px-4 py-2 focus:outline-none focus:border-brand-neon">
+                        <option value="popular">Популярности</option>
+                        <option value="price-asc">Цене: по возрастанию</option>
+                        <option value="price-desc">Цене: по убыванию</option>
+                        <option value="rating">Высокому рейтингу</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Фильтры категорий -->
+            <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-4 mb-8 no-scrollbar">
+                <button data-category="all" onclick="filterCategory('all')" class="category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-neon bg-brand-neon text-black">
+                    Все товары
+                </button>
+                <button data-category="shoes" onclick="filterCategory('shoes')" class="category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-border bg-brand-card text-gray-300 hover:border-gray-500">
+                    👟 Обувь
+                </button>
+                <button data-category="clothes" onclick="filterCategory('clothes')" class="category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-border bg-brand-card text-gray-300 hover:border-gray-500">
+                    👕 Одежда
+                </button>
+                <button data-category="equipment" onclick="filterCategory('equipment')" class="category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-border bg-brand-card text-gray-300 hover:border-gray-500">
+                    🏋️ Инвентарь
+                </button>
+                <button data-category="accessories" onclick="filterCategory('accessories')" class="category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-border bg-brand-card text-gray-300 hover:border-gray-500">
+                    🎒 Аксессуары
+                </button>
+            </div>
+
+            <!-- Грид карточек товаров -->
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Карточки рендерятся через JS -->
+            </div>
+
+            <!-- Сообщение если ничего не найдено -->
+            <div id="noResults" class="hidden text-center py-16">
+                <i class="fa-solid fa-magnifying-glass text-4xl text-gray-600 mb-4"></i>
+                <p class="text-xl font-semibold text-gray-400">Ничего не найдено</p>
+                <p class="text-sm text-gray-500">Попробуйте изменить запрос или фильтр</p>
+            </div>
+        </section>
+
+        <!-- 5. ПРОМО БАННЕР (АКЦИИ) -->
+        <section id="promo" class="py-12 bg-gradient-to-r from-brand-card via-brand-dark to-brand-card border-y border-brand-border relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gradient-to-r from-brand-neon to-brand-red rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <div class="space-y-4 max-w-xl z-10 text-center lg:text-left">
+                        <span class="bg-black/30 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-white">
+                            Спецпредложение
+                        </span>
+                        <h3 class="font-display text-3xl sm:text-5xl font-black uppercase leading-tight">
+                            Скидка до -40% на экипировку для фитнеса
+                        </h3>
+                        <p class="text-white/90 text-sm sm:text-base">
+                            Обновите свой спортивный гардероб премиальными брендами по лучшим ценам сезона.
+                        </p>
+                        <div class="pt-2">
+                            <a href="#catalog" onclick="filterCategory('equipment')" class="inline-block bg-white text-black font-extrabold px-8 py-3.5 rounded-xl hover:bg-gray-200 transition-all text-sm uppercase">
+                                Получить скидку
+                            </a>
+                        </div>
+                    </div>
+                    <div class="z-10 flex-shrink-0">
+                        <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80" alt="Фитнес"
+                            class="w-64 h-64 sm:w-80 sm:h-80 object-cover rounded-2xl border-4 border-white/20 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ПРЕИМУЩЕСТВА (FEATURES) -->
+        <section id="features" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-brand-border hover:border-brand-neon/50 transition-all">
+                    <div class="w-12 h-12 bg-brand-neon/10 rounded-xl flex items-center justify-center text-brand-neon text-2xl mb-4">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-2">Доставка по РК</h4>
+                    <p class="text-gray-400 text-sm">Доставляем курьером в Астану, Алматы, Шымкент и по всем регионам РК от 1 дня.</p>
+                </div>
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-brand-border hover:border-brand-neon/50 transition-all">
+                    <div class="w-12 h-12 bg-brand-neon/10 rounded-xl flex items-center justify-center text-brand-neon text-2xl mb-4">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-2">100% Оригинал</h4>
+                    <p class="text-gray-400 text-sm">Работаем напрямую с официальными дистрибьюторами мировых брендов.</p>
+                </div>
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-brand-border hover:border-brand-neon/50 transition-all">
+                    <div class="w-12 h-12 bg-brand-neon/10 rounded-xl flex items-center justify-center text-brand-neon text-2xl mb-4">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-2">Лёгкий возврат</h4>
+                    <p class="text-gray-400 text-sm">30 дней на возврат или обмен товара без лишних вопросов.</p>
+                </div>
+
+                <div class="bg-brand-card p-6 rounded-2xl border border-brand-border hover:border-brand-neon/50 transition-all">
+                    <div class="w-12 h-12 bg-brand-neon/10 rounded-xl flex items-center justify-center text-brand-neon text-2xl mb-4">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h4 class="font-bold text-lg text-white mb-2">Поддержка 24/7</h4>
+                    <p class="text-gray-400 text-sm">Наши эксперты помогут с выбором и ответят на любые вопросы.</p>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- 7. ФУТЕР (FOOTER) -->
+    <footer id="footer" class="bg-brand-card border-t border-brand-border text-gray-400 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+
+                <!-- О компании -->
+                <div class="lg:col-span-2 space-y-4">
+                    <a href="#" class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-brand-neon rounded-lg flex items-center justify-center transform -skew-x-12">
+                            <i class="fa-solid fa-bolt text-black text-base"></i>
+                        </div>
+                        <span class="font-display font-black text-2xl italic uppercase text-white">
+                            SPORT<span class="text-brand-neon">DO</span>
+                        </span>
+                    </a>
+                    <p class="text-sm text-gray-400 max-w-sm">
+                        Твой надёжный проводник в мир профессионального спорта и активного образа жизни в Казахстане.
+                    </p>
+                    <div class="flex gap-4 pt-2">
+                        <a href="#" class="w-10 h-10 rounded-xl bg-brand-dark border border-brand-border flex items-center justify-center text-gray-300 hover:text-brand-neon hover:border-brand-neon transition-all">
+                            <i class="fa-brands fa-telegram text-lg"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-brand-dark border border-brand-border flex items-center justify-center text-gray-300 hover:text-brand-neon hover:border-brand-neon transition-all">
+                            <i class="fa-brands fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-xl bg-brand-dark border border-brand-border flex items-center justify-center text-gray-300 hover:text-brand-neon hover:border-brand-neon transition-all">
+                            <i class="fa-brands fa-youtube text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Навигация -->
+                <div>
+                    <h5 class="font-bold text-white text-sm uppercase tracking-wider mb-4">Каталог</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#catalog" onclick="filterCategory('shoes')" class="hover:text-brand-neon transition-colors">Спортивная обувь</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('clothes')" class="hover:text-brand-neon transition-colors">Одежда для тренировок</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('equipment')" class="hover:text-brand-neon transition-colors">Силовое оборудование</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('accessories')" class="hover:text-brand-neon transition-colors">Фитнес-аксессуары</a></li>
+                    </ul>
+                </div>
+
+                <!-- Покупателям -->
+                <div>
+                    <h5 class="font-bold text-white text-sm uppercase tracking-wider mb-4">Покупателям</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Доставка и оплата</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Гарантия и возврат</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Таблица размеров</a></li>
+                        <li><a href="#" class="hover:text-brand-neon transition-colors">Бонусная программа</a></li>
+                    </ul>
+                </div>
+
+                <!-- Подписка -->
+                <div>
+                    <h5 class="font-bold text-white text-sm uppercase tracking-wider mb-4">Рассылка</h5>
+                    <p class="text-xs text-gray-400 mb-3">Получайте секретные скидки и анонсы новинок первыми.</p>
+                    <form onsubmit="handleSubscribe(event)" class="space-y-2">
+                        <input type="email" required placeholder="Ваш Email" class="w-full bg-brand-dark border border-brand-border rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-brand-neon">
+                        <button type="submit" class="w-full bg-brand-neon text-black font-bold py-2 rounded-xl text-xs hover:bg-brand-neonDark transition-all">ПОДПИСАТЬСЯ</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="border-t border-brand-border/60 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-4">
+                <div>©️ 2026 SPORTDO. Все права защищены.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:underline">Политика конфиденциальности</a>
+                    <a href="#" class="hover:underline">Пользовательское соглашение</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 8. БОКОВАЯ ПАНЕЛЬ КОРЗИНЫ -->
+    <div id="cartOverlay" onclick="toggleCart()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <div id="cartDrawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-brand-card border-l border-brand-border z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <!-- Шапка корзины -->
+        <div class="p-6 border-b border-brand-border flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-bag-shopping text-brand-neon text-xl"></i>
+                <h3 class="font-display font-bold text-xl text-white">Корзина</h3>
+            </div>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-white p-2 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Товары в корзине -->
+        <div id="cartItems" class="flex-grow overflow-y-auto p-6 space-y-4">
+            <!-- Динамический контент -->
+        </div>
+
+        <!-- Подвал корзины -->
+        <div id="cartFooter" class="p-6 border-t border-brand-border bg-brand-dark/50 space-y-4">
+            <div class="flex justify-between text-gray-400 text-sm">
+                <span>Доставка:</span>
+                <span class="text-brand-neon">Бесплатно</span>
+            </div>
+            <div class="flex justify-between items-end border-t border-brand-border/60 pt-3">
+                <span class="font-medium text-gray-300">Итого:</span>
+                <span id="cartTotal" class="font-display font-black text-2xl text-white">0 ₸</span>
+            </div>
+            <button onclick="openCheckoutModal()" class="w-full bg-brand-neon text-black font-extrabold py-4 rounded-xl hover:bg-brand-neonDark transition-all text-center block shadow-lg shadow-brand-neon/10">
+                ОФОРМИТЬ ЗАКАЗ
+            </button>
+        </div>
+    </div>
+
+    <!-- 9. МОДАЛЬНОЕ ОКНО "БЫСТРЫЙ ПРОСМОТР" -->
+    <div id="quickViewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-brand-card border border-brand-border rounded-3xl max-w-3xl w-full overflow-hidden relative shadow-2xl p-6 sm:p-8">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 bg-brand-dark text-gray-400 hover:text-white w-10 h-10 rounded-full flex items-center justify-center z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="quickViewContent" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Заполняется из JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. МОДАЛЬНОЕ ОКНО ОФОРМЛЕНИЯ ЗАКАЗА -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-brand-card border border-brand-border rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <h3 class="font-display font-bold text-2xl text-white mb-2">Оформление заказа</h3>
+            <p class="text-xs text-gray-400 mb-6">Заполните контактные данные, и мы свяжемся с вами</p>
+
+            <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Имя и Фамилия</label>
+                    <input type="text" required placeholder="Алихан Касымов" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-neon">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Телефон</label>
+                    <input type="tel" required placeholder="+7 (707) 000-00-00" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-neon">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Адрес доставки</label>
+                    <input type="text" required placeholder="г. Алматы, пр. Абая, д. 150" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-neon">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Способ оплаты</label>
+                    <select class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-neon">
+                        <option>Kaspi Gold / Kaspi QR</option>
+                        <option>Банковской картой онлайн (Visa/Mastercard)</option>
+                        <option>Halyk Pay</option>
+                        <option>Apple Pay / Google Pay</option>
+                        <option>Оплата курьеру при получении</option>
+                    </select>
+                </div>
+
+                <div class="pt-4 border-t border-brand-border flex justify-between items-center">
+                    <span class="text-sm text-gray-400">К оплате:</span>
+                    <span id="modalCartTotal" class="font-display font-bold text-xl text-brand-neon">0 ₸</span>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-neon text-black font-extrabold py-3.5 rounded-xl hover:bg-brand-neonDark transition-all text-center">
+                    ПОДТВЕРДИТЬ ЗАКАЗ
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 11. СКРИПТЫ МАГАЗИНА (JS) -->
+    <script>
+        // База данных товаров (цены в KZT)
+        const products = [
+            {
+                id: 1,
+                name: "Nike Air Zoom Alphafly",
+                category: "shoes",
+                price: 115000,
+                oldPrice: 145000,
+                rating: 4.9,
+                reviews: 128,
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80",
+                badge: "Топ продаж",
+                description: "Марафонские кроссовки премиум-класса с карбоновой пластиной Flyplate и амортизацией Zoom Air."
+            },
+            {
+                id: 2,
+                name: "Adidas Ultraboost Light",
+                category: "shoes",
+                price: 95000,
+                oldPrice: 110000,
+                rating: 4.8,
+                reviews: 94,
+                image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=600&q=80",
+                badge: "Новинка",
+                description: "Самые легкие кроссовки серии Ultraboost с улучшенной капсулой Light Boost для максимального возврата энергии."
+            },
+            {
+                id: 3,
+                name: "Худи Pro Training Tech",
+                category: "clothes",
+                price: 36000,
+                oldPrice: null,
+                rating: 4.7,
+                reviews: 45,
+                image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=600&q=80",
+                badge: null,
+                description: "Технологичное спортивное худи из влагоотводящего материала с флисовым начесом для тренировок на улице."
+            },
+            {
+                id: 4,
+                name: "Набор разборных гантелей 20кг",
+                category: "equipment",
+                price: 52000,
+                oldPrice: 60000,
+                rating: 5.0,
+                reviews: 210,
+                image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80",
+                badge: "Хит",
+                description: "Универсальный набор гантелей с прорезиненным покрытием дисков и эргономичным грифом."
+            },
+            {
+                id: 5,
+                name: "Спортивный рюкзак FitPack 30L",
+                category: "accessories",
+                price: 26000,
+                oldPrice: null,
+                rating: 4.6,
+                reviews: 67,
+                image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80",
+                badge: null,
+                description: "Вместительный рюкзак с отдельным изолированным отсеком для обуви и карманом для ноутбука."
+            },
+            {
+                id: 6,
+                name: "Компрессионные тайтсы Pro",
+                category: "clothes",
+                price: 24000,
+                oldPrice: 28000,
+                rating: 4.8,
+                reviews: 82,
+                image: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=600&q=80",
+                badge: null,
+                description: "Поддерживают мышцы во время интенсивных нагрузок, улучшают кровообращение и ускоряют восстановление."
+            },
+            {
+                id: 7,
+                name: "Умные часы Sport Watch V2",
+                category: "accessories",
+                price: 78000,
+                oldPrice: 95000,
+                rating: 4.9,
+                reviews: 156,
+                image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80",
+                badge: "-18%",
+                description: "Мониторинг пульса, SpO2, GPS-трекинг и более 100 спортивных режимов в пыле- и водонепроницаемом корпусе."
+            },
+            {
+                id: 8,
+                name: "Коврик для йоги и фитнеса Premium",
+                category: "equipment",
+                price: 15000,
+                oldPrice: null,
+                rating: 4.7,
+                reviews: 39,
+                image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=600&q=80",
+                badge: null,
+                description: "Нескользящий двусторонний коврик из экологичного материала TPE толщиной 6 мм."
+            }
+        ];
+
+        // Состояние приложения
+        let cart = JSON.parse(localStorage.getItem('sportdo_cart')) || [];
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCartUI();
+        });
+
+        // Рендеринг товаров
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const noResults = document.getElementById('noResults');
+            const sortValue = document.getElementById('sortSelect').value;
+
+            // Фильтрация
+            let filtered = products.filter(product => {
+                const matchCategory = activeCategory === 'all' || product.category === activeCategory;
+                const matchSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCategory && matchSearch;
+            });
+
+            // Сортировка
+            if (sortValue === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortValue === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortValue === 'rating') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            } else {
+                filtered.sort((a, b) => b.reviews - a.reviews); // popular
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            grid.innerHTML = filtered.map(product => `
+                <div class="bg-brand-card rounded-2xl border border-brand-border overflow-hidden group hover:border-brand-neon/50 transition-all flex flex-col justify-between">
+                    <div class="relative overflow-hidden">
+                        ${product.badge ? `
+                            <span class="absolute top-3 left-3 bg-brand-neon text-black font-extrabold text-[10px] uppercase px-2.5 py-1 rounded-lg z-10">
+                                ${product.badge}
+                            </span>
+                        ` : ''}
+                        <img src="${product.image}" alt="${product.name}" 
+                            class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500">
+                        
+                        <button onclick="openQuickView(${product.id})" 
+                            class="absolute bottom-3 right-3 bg-brand-dark/80 backdrop-blur-md hover:bg-brand-neon hover:text-black text-white p-2.5 rounded-xl transition-all">
+                            <i class="fa-solid fa-eye text-sm"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-5 flex-grow flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center gap-1 text-xs text-brand-orange mb-1">
+                                <i class="fa-solid fa-star text-[10px]"></i>
+                                <span class="font-bold text-white">${product.rating}</span>
+                                <span class="text-gray-500">(${product.reviews})</span>
+                            </div>
+                            <h3 class="font-bold text-white text-base group-hover:text-brand-neon transition-colors line-clamp-1">
+                                ${product.name}
+                            </h3>
+                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">${product.description}</p>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2 border-t border-brand-border/60">
+                            <div>
+                                <div class="font-display font-black text-lg text-white">${product.price.toLocaleString('ru-RU')} ₸</div>
+                                ${product.oldPrice ? `<div class="text-xs text-gray-500 line-through">${product.oldPrice.toLocaleString('ru-RU')} ₸</div>` : ''}
+                            </div>
+                            <button onclick="addToCart(${product.id})" 
+                                class="bg-brand-neon hover:bg-brand-neonDark text-black font-bold p-3 rounded-xl transition-all flex items-center justify-center">
+                                <i class="fa-solid fa-cart-plus text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Фильтрация по категориям
+        function filterCategory(category) {
+            activeCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.className = "category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-neon bg-brand-neon text-black";
+                } else {
+                    btn.className = "category-btn px-5 py-2.5 rounded-xl font-medium text-sm whitespace-nowrap transition-all border border-brand-border bg-brand-card text-gray-300 hover:border-gray-500";
+                }
+            });
+            renderProducts();
+        }
+
+        // Поиск
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value;
+            renderProducts();
+        }
+
+        function handleMobileSearch() {
+            searchQuery = document.getElementById('mobileSearchInput').value;
+            renderProducts();
+        }
+
+        // Логика корзины
+        function addToCart(productId) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += 1;
+            } else {
+                const product = products.find(p => p.id === productId);
+                cart.push({ ...product, quantity: 1 });
+            }
+            saveCart();
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(i => i.id !== productId);
+            saveCart();
+            updateCartUI();
+        }
+
+        function changeQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                    return;
+                }
+            }
+            saveCart();
+            updateCartUI();
+        }
+
+        function saveCart() {
+            localStorage.setItem('sportdo_cart', JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const cartItems = document.getElementById('cartItems');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartTotal = document.getElementById('cartTotal');
+            const modalCartTotal = document.getElementById('modalCartTotal');
+
+            const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+
+            cartBadge.textContent = totalCount;
+            cartTotal.textContent = `${totalPrice.toLocaleString('ru-RU')} ₸`;
+            modalCartTotal.textContent = `${totalPrice.toLocaleString('ru-RU')} ₸`;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fa-solid fa-bag-shopping text-4xl text-gray-600 mb-3"></i>
+                        <p class="text-gray-400 font-medium">Ваша корзина пуста</p>
+                        <p class="text-xs text-gray-500 mt-1">Выберите товары из каталога</p>
+                    </div>
+                `;
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <div class="flex items-center gap-4 bg-brand-dark p-3 rounded-2xl border border-brand-border">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-xl">
+                    <div class="flex-grow">
+                        <h4 class="text-sm font-bold text-white line-clamp-1">${item.name}</h4>
+                        <div class="text-xs text-brand-neon font-bold mt-1">${(item.price * item.quantity).toLocaleString('ru-RU')} ₸</div>
+                        
+                        <div class="flex items-center gap-3 mt-2">
+                            <button onclick="changeQuantity(${item.id}, -1)" class="w-6 h-6 bg-brand-card text-gray-300 rounded-lg flex items-center justify-center hover:text-white border border-brand-border text-xs">-</button>
+                            <span class="text-xs font-bold text-white">${item.quantity}</span>
+                            <button onclick="changeQuantity(${item.id}, 1)" class="w-6 h-6 bg-brand-card text-gray-300 rounded-lg flex items-center justify-center hover:text-white border border-brand-border text-xs">+</button>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" class="text-gray-500 hover:text-brand-red p-2 transition-colors">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Переключение корзины
+        function toggleCart(forceOpen = false) {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+
+            if (forceOpen || drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // Переключение мобильного меню
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Быстрый просмотр
+        function openQuickView(productId) {
+            const product = products.find(p => p.id === productId);
+            const content = document.getElementById('quickViewContent');
+            const modal = document.getElementById('quickViewModal');
+
+            content.innerHTML = `
+                <div>
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-72 object-cover rounded-2xl border border-brand-border">
+                </div>
+                <div class="flex flex-col justify-between space-y-4">
+                    <div>
+                        <span class="text-xs font-bold text-brand-neon uppercase tracking-wider">${product.category}</span>
+                        <h3 class="text-2xl font-bold text-white mt-1">${product.name}</h3>
+                        <div class="flex items-center gap-2 text-sm text-brand-orange mt-2">
+                            <i class="fa-solid fa-star"></i>
+                            <span class="font-bold text-white">${product.rating}</span>
+                            <span class="text-gray-500">(${product.reviews} отзывов)</span>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-4">${product.description}</p>
+                    </div>
+
+                    <div>
+                        <div class="flex items-baseline gap-3 mb-4">
+                            <span class="font-display font-black text-3xl text-white">${product.price.toLocaleString('ru-RU')} ₸</span>
+                            ${product.oldPrice ? `<span class="text-sm text-gray-500 line-through">${product.oldPrice.toLocaleString('ru-RU')} ₸</span>` : ''}
+                        </div>
+                        <button onclick="addToCart(${product.id}); closeQuickView();" 
+                            class="w-full bg-brand-neon text-black font-extrabold py-3.5 rounded-xl hover:bg-brand-neonDark transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-plus"></i> ДОБАВИТЬ В КОРЗИНУ
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeQuickView() {
+            const modal = document.getElementById('quickViewModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Модальное окно оформления заказа
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                alert('Добавьте товары в корзину перед оформлением');
+                return;
+            }
+            toggleCart();
+            const modal = document.getElementById('checkoutModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeCheckoutModal() {
+            const modal = document.getElementById('checkoutModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            alert('Рахмет за заказ! Наш менеджер свяжется с вами в ближайшее время.');
+            cart = [];
+            saveCart();
+            updateCartUI();
+            closeCheckoutModal();
+        }
+
+        // Подписка на рассылку
+        function handleSubscribe(e) {
+            e.preventDefault();
+            alert('Вы успешно подписались на рассылку!');
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>
